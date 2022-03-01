@@ -1,0 +1,25 @@
+{
+    "name": "abix/system-life-cycle",
+    "description": "System Life Cycle",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abi",
+            "email": "abi_salazar@hotmail.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Abix\\SystemLifeCycle\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Abix\\SystemLifeCycle\\SystemLifeCycleServiceProvider"
+            ]
+        }
+    }
+}
