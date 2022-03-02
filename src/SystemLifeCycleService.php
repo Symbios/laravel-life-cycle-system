@@ -194,4 +194,27 @@ abstract class SystemLifeCycleService implements SystemLifeCycleContract
     {
         return $this->systemLifeCycleModel->attempts >= 1;
     }
+
+    /**
+     * Sets params
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    protected function setParam(string $key, $value): void
+    {
+        $this->params[$key] = $value;
+    }
+
+    /**
+     * Gets the value of the param
+     *
+     * @param string $key
+     * @return mixed
+     */
+    protected function getParam(string $key)
+    {
+        return $this->params[$key] ?? null;
+    }
 }
