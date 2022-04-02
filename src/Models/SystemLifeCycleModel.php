@@ -40,13 +40,13 @@ class SystemLifeCycleModel extends Model
         'stage' => 'integer',
     ];
 
-    public const PENDING_STATE = 1;
+    public const PENDING_STATE = 'pending';
 
-    public const PROCESSING_STATE = 2;
+    public const PROCESSING_STATE = 'processing';
 
-    public const COMPLETED_STATE = 3;
+    public const COMPLETED_STATE = 'completed';
 
-    public const FAILED_STATE = 4;
+    public const FAILED_STATE = 'failed';
 
     /**
      * The model's attributes.
@@ -96,31 +96,46 @@ class SystemLifeCycleModel extends Model
      * @param Builder $builder
      * @return Builder
      */
-    public function scopeWhereCanBeExecuted(Builder $builder): Builder
-    {
-        $time = now();
+    public function scopeWhereCanBeExecuted(
+        Builder $builder,
+        string $startDate = null,
+        string $endDate = null,
+        bool $onlyByCron = true
+
+    ): Builder {
+        $today = now()->toDateTimeString();
+
+        $params = [
+            [
+                'active', 1,
+            ],
+            [
+                'starts_at', '<', $today,
+            ],
+
+        ];
+
+        if ($onlyByCron) {
+            $params[] = [
+                'activated_by_cron' => $onlyByCron,
+            ];
+        }
 
         return $builder->join(
             'system_life_cycles',
             'system_life_cycles.id',
             'system_life_cycle_models.system_life_cycle_id'
-        )->where([
-            [
-                'active', 1,
-            ],
-            [
-                'starts_at', '<', $time,
-            ]
-        ])->where(function ($query) use ($time) {
-            $query->where('system_life_cycles.ends_at', '>', $time)
-                ->orWhereNull('system_life_cycles.ends_at');
-        })->where(function ($query) {
-            $query->whereNull('executes_at')
-                ->orWhereBetween('executes_at', [
-                    now()->startOfHour()->toDateTimeString(),
-                    now()->endOfHour()->toDateTimeString(),
-                ]);
-        });
+        )->where($params)
+            ->where(function ($query) use ($today) {
+                $query->where('system_life_cycles.ends_at', '>', $today)
+                    ->orWhereNull('system_life_cycles.ends_at');
+            })->where(function ($query) use ($startDate, $endDate) {
+                $query->whereNull('executes_at')
+                    ->orWhereBetween('executes_at', [
+                        $startDate ?: now()->startOfMinute()->toDateTimeString(),
+                        $endDate ?: now()->addMinutes(10)->toDateTimeString(),
+                    ]);
+            });
     }
 
     /**

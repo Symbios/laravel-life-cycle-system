@@ -1,5 +1,6 @@
 <?php
 
+use Abix\SystemLifeCycle\Models\SystemLifeCycleLog;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,7 +20,9 @@ class CreateSystemLifeCycleLogsTable extends Migration
             $table->unsignedBigInteger('system_life_cycle_stage_id')->index();
             $table->unsignedBigInteger('model_id');
             $table->string('model_type');
-            $table->unsignedTinyInteger('state')->default(1)->index();
+            $table->string('state', 20)
+                ->default(SystemLifeCycleLog::SUCCESS_STATE)
+                ->index();
             $table->longText('payload')->nullable();
             $table->unsignedTinyInteger('attempts')->default(0);
             $table->longText('error')->nullable();

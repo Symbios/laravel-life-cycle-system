@@ -1,5 +1,6 @@
 <?php
 
+use Abix\SystemLifeCycle\Models\SystemLifeCycleModel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,8 @@ class CreateSystemLifeCycleModelsTable extends Migration
             $table->unsignedBigInteger('system_life_cycle_id')->index();
             $table->unsignedBigInteger('model_id');
             $table->string('model_type');
-            $table->unsignedTinyInteger('state')->default(1);
+            $table->string('state', 20)
+                ->default(SystemLifeCycleModel::PENDING_STATE);
             $table->unsignedBigInteger('system_life_cycle_stage_id')->nullable();
             $table->string('batch', 50)->nullable();
             $table->longText('payload')->nullable();

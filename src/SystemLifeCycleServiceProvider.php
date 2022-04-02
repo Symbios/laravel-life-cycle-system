@@ -27,7 +27,7 @@ class SystemLifeCycleServiceProvider extends ServiceProvider
 
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);
-            $schedule->command('system-life-cycle:run')->hourly();
+            $schedule->command('system-life-cycle:run')->everyTenMinutes();
             $schedule->command('system-life-cycle:logs-clean-up')->daily();
             $schedule->command('system-life-cycle:completed-models-clean-up')->daily();
         });

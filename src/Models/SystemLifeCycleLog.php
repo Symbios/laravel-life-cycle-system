@@ -44,12 +44,12 @@ class SystemLifeCycleLog extends Model
     /**
      * Success state
      */
-    public const SUCCESS_STATE = 1;
+    public const SUCCESS_STATE = 'success';
 
     /**
      * Failed state
      */
-    public const FAILED_STATE = 2;
+    public const FAILED_STATE = 'failed';
 
     /**
      * Life cycle
