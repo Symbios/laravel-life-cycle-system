@@ -15,7 +15,7 @@ trait EnableSystemLifeCycles
     public function lifeCycles()
     {
         if (config('systemLifeCycle.custom_relation_mapping')) {
-            Relation::enforceMorphMap(config('systemLifeCycle.relation_mapping'));
+            Relation::morphMap(config('systemLifeCycle.relation_mapping'));
         }
 
         return $this->morphMany(SystemLifeCycleModel::class, 'model');
