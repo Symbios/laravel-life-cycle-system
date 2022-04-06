@@ -5,6 +5,7 @@ namespace Abix\SystemLifeCycle\Traits;
 use Abix\SystemLifeCycle\Models\SystemLifeCycle;
 use Abix\SystemLifeCycle\Models\SystemLifeCycleModel;
 use Abix\SystemLifeCycle\Models\SystemLifeCycleStage;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait EnableSystemLifeCycles
 {
@@ -13,6 +14,10 @@ trait EnableSystemLifeCycles
      */
     public function lifeCycles()
     {
+        if (config('systemLifeCycle.custom_relation_mapping')) {
+            Relation::enforceMorphMap(config('systemLifeCycle.relation_mapping'));
+        }
+
         return $this->morphMany(SystemLifeCycleModel::class, 'model');
     }
 
