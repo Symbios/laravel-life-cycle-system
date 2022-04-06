@@ -23,7 +23,7 @@ class SystemLifeCycleServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/config/systemLifeCycle.php' => config_path('systemLifeCycle.php'),
-        ]);
+        ], 'systemLifeCycleConfig');
 
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);

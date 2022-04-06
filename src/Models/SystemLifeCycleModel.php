@@ -85,7 +85,9 @@ class SystemLifeCycleModel extends Model
      */
     public function model()
     {
-        Relation::enforceMorphMap(config('systemLifeCycle.relation_mapping'));
+        if (config('systemLifeCycle.custom_relation_mapping')) {
+            Relation::morphMap(config('systemLifeCycle.relation_mapping'));
+        }
 
         return $this->morphTo('model');
     }
