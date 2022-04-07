@@ -20,7 +20,7 @@ class CreateSystemLifeCycleLogsTable extends Migration
             $table->unsignedBigInteger('system_life_cycle_stage_id')->index();
             $table->unsignedBigInteger('model_id');
             $table->string('model_type');
-            $table->string('state', 20)
+            $table->string('status', 20)
                 ->default(SystemLifeCycleLog::SUCCESS_STATE)
                 ->index();
             $table->longText('payload')->nullable();

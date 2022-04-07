@@ -20,7 +20,7 @@ class CreateSystemLifeCyclesTable extends Migration
             $table->boolean('active')->default(1)->index();
             $table->dateTime('starts_at')->nullable();
             $table->dateTime('ends_at')->nullable();
-            $table->unsignedTinyInteger('activated_by_cron')->default(1);
+            $table->unsignedTinyInteger('activate_by_cron')->default(1);
             $table->softDeletes();
             $table->timestamps();
 

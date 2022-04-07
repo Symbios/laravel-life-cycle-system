@@ -74,11 +74,11 @@ trait EnableSystemLifeCycles
 
         $newData = [
             'system_life_cycle_stage_id' => $newStage,
-            'state' => SystemLifeCycleModel::PENDING_STATE,
+            'status' => SystemLifeCycleModel::PENDING_STATE,
         ];
 
         if (!$newStage) {
-            $newData['state'] = SystemLifeCycleModel::COMPLETED_STATE;
+            $newData['status'] = SystemLifeCycleModel::COMPLETED_STATE;
         }
 
         $lifeCycleModel->update($newData);

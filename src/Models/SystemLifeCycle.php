@@ -35,6 +35,7 @@ class SystemLifeCycle extends Model
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
         'active' => 'boolean',
+        'activate_by_cron' => 'boolean',
     ];
 
     /**

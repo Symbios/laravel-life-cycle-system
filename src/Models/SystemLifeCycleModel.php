@@ -36,7 +36,6 @@ class SystemLifeCycleModel extends Model
     protected $casts = [
         'payload' => 'json',
         'model_id' => 'integer',
-        'state' => 'integer',
         'stage' => 'integer',
     ];
 
@@ -54,7 +53,7 @@ class SystemLifeCycleModel extends Model
      * @var array
      */
     protected $attributes = [
-        'state' => SystemLifeCycleModel::PENDING_STATE,
+        'status' => SystemLifeCycleModel::PENDING_STATE,
         'attempts' => 0,
     ];
 
@@ -119,7 +118,7 @@ class SystemLifeCycleModel extends Model
 
         if ($onlyByCron) {
             $params[] = [
-                'activated_by_cron' => $onlyByCron,
+                'activate_by_cron', $onlyByCron,
             ];
         }
 
@@ -148,7 +147,7 @@ class SystemLifeCycleModel extends Model
      */
     public function scopePending(Builder $builder): Builder
     {
-        return $builder->where('state', SystemLifeCycleModel::PENDING_STATE);
+        return $builder->where('status', SystemLifeCycleModel::PENDING_STATE);
     }
 
     /**
@@ -159,7 +158,7 @@ class SystemLifeCycleModel extends Model
      */
     public function scopeProcessing(Builder $builder): Builder
     {
-        return $builder->where('state', SystemLifeCycleModel::PROCESSING_STATE);
+        return $builder->where('status', SystemLifeCycleModel::PROCESSING_STATE);
     }
 
     /**
@@ -170,7 +169,7 @@ class SystemLifeCycleModel extends Model
      */
     public function scopeCompleted(Builder $builder): Builder
     {
-        return $builder->where('state', SystemLifeCycleModel::COMPLETED_STATE);
+        return $builder->where('status', SystemLifeCycleModel::COMPLETED_STATE);
     }
 
     /**
@@ -181,6 +180,6 @@ class SystemLifeCycleModel extends Model
      */
     public function scopeFailed(Builder $builder): Builder
     {
-        return $builder->where('state', SystemLifeCycleModel::FAILED_STATE);
+        return $builder->where('status', SystemLifeCycleModel::FAILED_STATE);
     }
 }

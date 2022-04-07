@@ -40,6 +40,8 @@ class CreateSystemLifeCycleCommand extends Command
 
         $lifeCycle['starts_at'] = $this->checkForDate('When do you want it to start?');
 
+        $lifeCycle['activate_by_cron'] = $this->confirm('Does it activate by the cron job?', true);
+
         if ($this->confirm('Does it have an end date?', false)) {
             $lifeCycle['ends_at'] = $this->checkForDate('What is the end date');
         }

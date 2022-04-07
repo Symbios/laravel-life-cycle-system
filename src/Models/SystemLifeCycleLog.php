@@ -37,7 +37,6 @@ class SystemLifeCycleLog extends Model
     protected $casts = [
         'payload' => 'json',
         'model_id' => 'integer',
-        'state' => 'integer',
         'stage' => 'integer',
     ];
 

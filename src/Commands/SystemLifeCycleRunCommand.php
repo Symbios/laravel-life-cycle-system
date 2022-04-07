@@ -43,16 +43,16 @@ class SystemLifeCycleRunCommand extends Command
                 'system_life_cycle_stage_id' => DB::raw($sql),
             ]);
 
-        SystemLifeCycleModel::where('state', SystemLifeCycleModel::PENDING_STATE)
+        SystemLifeCycleModel::where('status', SystemLifeCycleModel::PENDING_STATE)
             ->whereCanBeExecuted()
             ->update([
                 'batch' => $batchId,
-                'state' => SystemLifeCycleModel::PROCESSING_STATE,
+                'status' => SystemLifeCycleModel::PROCESSING_STATE,
             ]);
 
         SystemLifeCycleModel::with(['currentStage'])
             ->select('system_life_cycle_models.*')
-            ->where('state', SystemLifeCycleModel::PROCESSING_STATE)
+            ->where('status', SystemLifeCycleModel::PROCESSING_STATE)
             ->where('batch', $batchId)
             ->whereCanBeExecuted()
             ->chunkById(100, function ($items) {
