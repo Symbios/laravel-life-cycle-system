@@ -140,6 +140,20 @@ class SystemLifeCycleModel extends Model
     }
 
     /**
+     * Gets by code
+     *
+     * @param Builder $builder
+     * @param string $code
+     * @return Builder
+     */
+    public function scopeWhereLifeCycleCode(Builder $builder, string $code): Builder
+    {
+        return $builder->whereHas('lifeCycle', function ($query) use ($code) {
+            $query->where('code', $code);
+        });
+    }
+
+    /**
      * Filters by state
      *
      * @param Builder $builder
