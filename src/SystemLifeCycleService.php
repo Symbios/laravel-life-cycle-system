@@ -60,7 +60,7 @@ abstract class SystemLifeCycleService implements SystemLifeCycleContract
                 if (!$this->shouldContinueToNextStage() && !$this->isRetry()) {
                     // Set back to pending state
                     $this->systemLifeCycleModel->update([
-                        'state' => SystemLifeCycleModel::PENDING_STATE,
+                        'status' => SystemLifeCycleModel::PENDING_STATE,
                         'executes_at' => $this->setExecutesAt(),
                     ]);
 
@@ -92,17 +92,17 @@ abstract class SystemLifeCycleService implements SystemLifeCycleContract
         $nextStage = SystemLifeCycleStage::where('order', '>', $currentStage->order)
             ->where('system_life_cycle_id', $this->systemLifeCycleModel->system_life_cycle_id)
             ->orderBy('order', 'ASC')
-            ->first();
+            ->value('id');
 
         $attributes = [
-            'state' => SystemLifeCycleModel::COMPLETED_STATE,
+            'status' => SystemLifeCycleModel::COMPLETED_STATE,
             'payload' => $this->params,
             'executes_at' => null,
         ];
 
         if ($nextStage) {
-            $attributes['state'] = SystemLifeCycleModel::PENDING_STATE;
-            $attributes['system_life_cycle_stage_id'] = $nextStage->id;
+            $attributes['status'] = SystemLifeCycleModel::PENDING_STATE;
+            $attributes['system_life_cycle_stage_id'] = $nextStage;
             $attributes['attempts'] = 0;
         }
 
@@ -120,7 +120,7 @@ abstract class SystemLifeCycleService implements SystemLifeCycleContract
             SystemLifeCycleModel::FAILED_STATE : SystemLifeCycleModel::PENDING_STATE;
 
         $this->systemLifeCycleModel->update([
-            'state' => $state,
+            'status' => $state,
             'attempts' => $this->systemLifeCycleModel->attempts + 1,
             'executes_at' => now()->addHour(),
         ]);
@@ -167,7 +167,7 @@ abstract class SystemLifeCycleService implements SystemLifeCycleContract
     protected function createSuccessLog()
     {
         $this->createLog([
-            'state' => SystemLifeCycleLog::SUCCESS_STATE,
+            'status' => SystemLifeCycleLog::SUCCESS_STATE,
         ]);
     }
 
@@ -181,7 +181,7 @@ abstract class SystemLifeCycleService implements SystemLifeCycleContract
     {
         $this->createLog([
             'error' => $e,
-            'state' => SystemLifeCycleLog::FAILED_STATE,
+            'status' => SystemLifeCycleLog::FAILED_STATE,
         ]);
     }
 

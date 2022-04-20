@@ -49,6 +49,26 @@ trait EnableSystemLifeCycles
     }
 
     /**
+     * Gets the life cycle class
+     *
+     * @return object
+     */
+    public function getLifeCycleStageByCode(string $code): ?object
+    {
+        $lifeCycle = $this->lifeCycles()
+            ->whereLifeCycleCode($code)
+            ->first();
+
+        if (!$lifeCycle) {
+            return null;
+        }
+
+        $class = optional($lifeCycle->currentStage)->class;
+
+        return new $class($lifeCycle->params);
+    }
+
+    /**
      * Sets the new stage
      *
      * @param string $code
@@ -56,11 +76,9 @@ trait EnableSystemLifeCycles
      */
     public function setNextLifeCycleStage(string $code): void
     {
-        $id = SystemLifeCycle::where('code', $code)->value('id');
-
-        $lifeCycleModel = $this->lifeCycles()->where([
-            'system_life_cycle_id' => $id,
-        ])->first();
+        $lifeCycleModel = $this->lifeCycles()
+            ->whereLifeCycleCode($code)
+            ->first();
 
         if (!$lifeCycleModel) {
             return;
@@ -74,11 +92,11 @@ trait EnableSystemLifeCycles
 
         $newData = [
             'system_life_cycle_stage_id' => $newStage,
-            'state' => SystemLifeCycleModel::PENDING_STATE,
+            'status' => SystemLifeCycleModel::PENDING_STATE,
         ];
 
         if (!$newStage) {
-            $newData['state'] = SystemLifeCycleModel::COMPLETED_STATE;
+            $newData['status'] = SystemLifeCycleModel::COMPLETED_STATE;
         }
 
         $lifeCycleModel->update($newData);
@@ -88,14 +106,12 @@ trait EnableSystemLifeCycles
      * Removes a life cycle
      *
      * @param string $code
-     * @return void
+     * @return bool
      */
-    public function removeLifeCycle(string $code): void
+    public function removeLifeCycle(string $code): bool
     {
-        $id = SystemLifeCycle::where('code', $code)->value('id');
-
-        $this->lifeCycles()->where([
-            'system_life_cycle_id' => $id,
-        ])->delete();
+        return $this->lifeCycles()
+            ->whereLifeCycleCode($code)
+            ->delete();
     }
 }
