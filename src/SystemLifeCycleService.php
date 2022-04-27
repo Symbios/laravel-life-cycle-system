@@ -8,6 +8,7 @@ use Abix\SystemLifeCycle\Models\SystemLifeCycleModel;
 use Abix\SystemLifeCycle\Models\SystemLifeCycleStage;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 abstract class SystemLifeCycleService implements SystemLifeCycleContract
