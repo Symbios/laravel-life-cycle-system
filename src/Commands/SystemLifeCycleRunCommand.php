@@ -33,9 +33,17 @@ class SystemLifeCycleRunCommand extends Command
     {
         $batchId = Str::uuid()->toString();
 
+        /**
+         * This is just a back up in case old jobs didnt run for x reason, this will reset the executes timing
+         */
+        SystemLifeCycleModel::where('executes_at', '<', now()->subMinutes(20))
+            ->update([
+                'executes_at' => null,
+            ]);
+
         $sql = "(SELECT id FROM system_life_cycle_stages
-        WHERE system_life_cycle_models.system_life_cycle_id = system_life_cycle_stages.system_life_cycle_id
-        ORDER BY `order` ASC LIMIT 1)";
+            WHERE system_life_cycle_models.system_life_cycle_id = system_life_cycle_stages.system_life_cycle_id
+            ORDER BY `order` ASC LIMIT 1)";
 
         SystemLifeCycleModel::whereNull('system_life_cycle_stage_id')
             ->whereCanBeExecuted()
