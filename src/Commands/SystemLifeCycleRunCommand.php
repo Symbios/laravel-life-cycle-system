@@ -65,8 +65,7 @@ class SystemLifeCycleRunCommand extends Command
             ->whereCanBeExecuted()
             ->chunkById(100, function ($items) {
                 foreach ($items as $item) {
-                    SystemLifeCycleExecuteJob::dispatch($item)
-                        ->delay($item->executes_at ?? now());
+                    SystemLifeCycleExecuteJob::dispatch($item);
                 }
             }, 'system_life_cycle_models.id', 'id');
 
